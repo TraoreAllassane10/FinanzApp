@@ -2,7 +2,7 @@
 
 @section('auth-form')
     <p class="text-xl text-gray-600 text-center">Benvenu!</p>
-    <a href="" class="flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100">
+    <a href="{{route('auth.google.redirect')}}" class="flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100">
         <div class="px-4 py-3">
             <svg class="h-6 w-6" viewBox="0 0 40 40">
                 <path
