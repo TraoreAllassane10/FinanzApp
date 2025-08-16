@@ -1,6 +1,17 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminSubscriptionController;
+use App\Http\Controllers\Admin\AdminTransactionController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\CardController;
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\User\PocketController;
+use App\Http\Controllers\User\StatsController;
+use App\Http\Controllers\User\SubscriptionController;
+use App\Http\Controllers\User\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,4 +28,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+#ADMIN
+Route::get('/admin/home', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.home');
+Route::resource('/admin/plan', PlanController::class)->middleware(['auth', 'verified']);
+
+Route::get('/admin/subscription', [AdminSubscriptionController::class, "index"])->middleware(['auth', 'verified'])->name('admin.subscription');
+Route::get('/admin/subscription/1', [AdminSubscriptionController::class, "show"])->middleware(['auth', 'verified'])->name('admin.subscription.show');
+
+Route::get('/admin/users', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.user');
+
+Route::get('/admin/transaction', [AdminTransactionController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.transaction');
+
+# USER
+Route::get('/home', [UserDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('user.home');
+
+Route::resource('/card', CardController::class)->middleware(['auth', 'verified']);
+
+Route::resource('/pocket', PocketController::class)->middleware(['auth', 'verified']);
+
+Route::resource('/transaction', TransactionController::class)->middleware(['auth', 'verified']);
+
+Route::get('/statistique', [StatsController::class, 'index'])->middleware(['auth', 'verified'])->name('stats.index');
+
+Route::get('/subscription', [SubscriptionController::class, 'index'])->middleware(['auth', 'verified'])->name('subscription.index');
+
+require __DIR__ . '/auth.php';

@@ -47,6 +47,11 @@ class GoogleAuthController extends Controller
             Auth::login($newUser);
         }
 
-        return redirect('/dashboard');
+        if (Auth::user()->role == User::ADMIN_ROLE)
+        {
+            return to_route('admin.home');
+        }
+
+        return redirect('/home');
     }
 }
