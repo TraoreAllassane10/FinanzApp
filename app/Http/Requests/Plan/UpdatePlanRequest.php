@@ -11,7 +11,7 @@ class UpdatePlanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,14 @@ class UpdatePlanRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            //
+            "name" => ['required', "string", "max:255", "unique:plans"],
+            "price" => ['required', 'decimal:0,2'],
+            "duration" => ['required', 'string'],
+            "max_cards" => ["required", "numeric"],
+            "max_pocket" => ["required", "numeric"],
+            "max_transaction" => ["required", "numeric"],
         ];
     }
 }

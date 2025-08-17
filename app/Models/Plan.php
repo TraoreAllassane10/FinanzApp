@@ -14,7 +14,7 @@ class Plan extends Model
         "name",
         "price",
         "duration",
-        "max_card",
+        "max_cards",
         "max_pocket",
         "max_transaction"
     ];

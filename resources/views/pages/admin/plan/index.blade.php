@@ -5,15 +5,18 @@
     <div class="mb-6 flex flex-col items-center justify-between lg:flex-row">
         <h1 class="text-2xl font-bold">Gestion des Plans d'abonnement</h1>
 
-        <a href="{{ route('plan.create') }}" class="rounded-full bg-gray-700 px-4 py-2 font-bold text-white hover:bg-gray-600">
+        <a href="{{ route('plan.create') }}"
+            class="rounded-full bg-gray-700 px-4 py-2 font-bold text-white hover:bg-gray-600">
             Ajouter un plan
         </a>
     </div>
 
     <!-- Message de succès -->
-    <div class="w-full bg-green-400 p-3 text-center text-white">
-        Plan ajouté avec succès !
-    </div>
+    @session('success')
+        <div class="w-full bg-green-400 p-3 text-center text-white">
+            {{ session('success') }}
+        </div>
+    @endsession
 
     <!-- Subscription Table -->
     <div class="overflow-x-auto rounded-lg bg-white p-2 shadow-md">
@@ -51,47 +54,53 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                @foreach ($plans as $plan)
+                    <tr>
                     <td class="border-b border-gray-200 px-6 py-4 text-sm">
                         <span class="rounded-md bg-blue-200 px-3 py-1 text-xs font-semibold text-blue-700">
-                            Plan Premium
+                            {{$plan->name}}
                         </span>
                     </td>
                     <td class="border-b border-gray-200 px-4 py-4 text-sm">
                         <span class="rounded-md bg-green-200 px-3 py-1 text-xs font-semibold text-green-700">
-                            1 an
+                            {{$plan->duration}}
                         </span>
                     </td>
                     <td class="border-b border-gray-200 px-2 py-4 text-sm">
                         <span class="rounded-md bg-green-200 px-3 py-1 text-xs font-semibold text-green-700">
-                            5
+                           {{$plan->max_cards}}
                         </span>
                     </td>
                     <td class="border-b border-gray-200 px-2 py-4 text-sm">
                         <span class="rounded-md bg-green-200 px-3 py-1 text-xs font-semibold text-green-700">
-                            10
+                            {{$plan->max_pocket}}
                         </span>
                     </td>
                     <td class="border-b border-gray-200 px-3 py-4 text-sm">
                         <span class="rounded-md bg-green-200 px-3 py-1 text-xs font-semibold text-green-700">
-                            100
+                            {{$plan->max_transaction}}
                         </span>
                     </td>
                     <td class="border-b border-gray-200 px-6 py-4 text-sm">
-                        $100.00
+                        ${{$plan->price}}
                     </td>
                     <td class="flex items-center border-b border-gray-200 px-6 py-4 text-sm">
-                        <a href="#" class="rounded-full bg-blue-200 px-3 py-1 text-sm font-semibold text-green-700">
+                        <a href="{{route('plan.edit', $plan->id)}}" class="rounded-full bg-blue-200 px-3 py-1 text-sm font-semibold text-green-700">
                             📝
                         </a>
-                        <form method="POST" action="#">
+                        <form method="POST" action="{{route('plan.destroy', $plan)}}">
+                            @csrf
+                            @method("delete")
+                            
                             <button class="rounded-full bg-red-200 px-3 py-1 text-sm font-semibold text-green-700"
                                 type="submit">
                                 🗑️
                             </button>
                         </form>
                     </td>
-                </tr>
+                </tr> 
+                @endforeach
+                
             </tbody>
         </table>
     </div>

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Plan;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePlanRequest;
-use App\Http\Requests\UpdatePlanRequest;
+use App\Http\Requests\Plan\StorePlanRequest;
+use App\Http\Requests\Plan\UpdatePlanRequest;
 
 class PlanController extends Controller
 {
@@ -14,7 +14,9 @@ class PlanController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.plan.index');
+        return view('pages.admin.plan.index', [
+            "plans" => Plan::all()
+        ]);
     }
 
     /**
@@ -22,7 +24,9 @@ class PlanController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.plan.edit');
+        return view('pages.admin.plan.edit', [
+            'durations' => Plan::getDurationValues()
+        ]);
     }
 
     /**
@@ -30,7 +34,9 @@ class PlanController extends Controller
      */
     public function store(StorePlanRequest $request)
     {
-        //
+        Plan::create($request->validated());
+
+        return to_route('plan.index')->with('success', 'Plan enregistré avec succes');
     }
 
     /**
@@ -46,7 +52,10 @@ class PlanController extends Controller
      */
     public function edit(Plan $plan)
     {
-        //
+         return view('pages.admin.plan.edit', [
+            'durations' => Plan::getDurationValues(),
+            'plan' => $plan
+        ]);
     }
 
     /**
@@ -54,7 +63,9 @@ class PlanController extends Controller
      */
     public function update(UpdatePlanRequest $request, Plan $plan)
     {
-        //
+        $plan->update($request->validated());
+
+        return to_route('plan.index')->with('success', 'Plan modifié avec succes');
     }
 
     /**
@@ -62,6 +73,7 @@ class PlanController extends Controller
      */
     public function destroy(Plan $plan)
     {
-        //
+        $plan->delete();
+        return back()->with('success','Plan supprimé avec succes');
     }
 }

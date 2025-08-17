@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->decimal('price', 4, 2)->default(0);
             $table->string('duration')->default(Plan::FREE_ACCESS);
-            $table->integer('max_card');
+            $table->integer('max_cards');
             $table->integer('max_pocket');
             $table->integer('max_transaction');
             $table->timestamps();
