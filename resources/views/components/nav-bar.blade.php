@@ -7,11 +7,11 @@
     <input type="text" placeholder="Rechercher" class="w-full lg:w-1/3 p-2 rounded-lg border border-gray-300" />
     <div class="flex items-center space-x-4 mt-4 lg:mt-0">
         <div class="flex items-center space-x-2">
-            <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-full w-10 h-10" />
-            <div>
+            <img src="{{ Auth::user()->image ? Auth::user()->getImageUrl() : 'https://via.placeholder.com/40' }}" alt="Profile" class="rounded-full w-10 h-10" />
+            <a href="{{ route("profile.edit") }}">
                 <h3 class="text-gray-800">{{auth()->user()->first_name}} {{auth()->user()->last_name}}</h3>
                 <p class="text-gray-500 text-sm">{{auth()->user()->email}}</p>
-            </div>
+            </a>
         </div>
     </div>
 </div>
