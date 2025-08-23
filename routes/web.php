@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\CardController;
+use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\PocketController;
 use App\Http\Controllers\User\StatsController;
@@ -51,5 +52,11 @@ Route::resource('/transaction', TransactionController::class)->middleware(['auth
 Route::get('/statistique', [StatsController::class, 'index'])->middleware(['auth', 'verified'])->name('stats.index');
 
 Route::get('/subscription', [SubscriptionController::class, 'index'])->middleware(['auth', 'verified'])->name('subscription.index');
+
+# CHECKOUT
+Route::get('/checkout/plan/{plan}', [CheckoutController::class, 'checkout'])->name('plan.checkout')->middleware(['auth', 'verified']);
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('plan.checkout.success')->middleware(['auth', 'verified']);
+Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('plan.checkout.cancel')->middleware(['auth', 'verified']);
+
 
 require __DIR__ . '/auth.php';

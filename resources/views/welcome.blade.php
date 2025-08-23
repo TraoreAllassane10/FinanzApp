@@ -19,6 +19,13 @@
 
 <body>
     <section class="bg-[url('https://pagedone.io/asset/uploads/1691055810.png')] bg-cover bg-center pt-8 lg:pt-32">
+
+        @error("error")
+            <span class="w-full justify-center rounded-md bg-green-500 p-3 text-white" id="status-message">
+                {{session("error")}}
+            </span>
+        @enderror
+
         <div class="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
             <div class="mx-auto mb-4 flex w-60 items-center justify-between rounded-full border border-emerald-600 p-1">
                 <span class="font-inter ml-3 text-xs font-medium text-gray-900">Connectez vous a votre compte</span>
@@ -131,7 +138,7 @@
                     </ul>
                 </div>
                 <a class="mt-8 block w-full rounded-md border border-transparent bg-emerald-50 px-6 py-3 text-center font-medium text-emerald-700 hover:bg-emerald-100"
-                    href="{{ route('register') }}">Inscrivez-vous gratuitement</a>
+                  data-period="Monthly"  href="{{ route('register') }}">Inscrivez-vous Gratuitement</a>
             </div>
 
             <div class="relative flex flex-col rounded-2xl border border-gray-200 p-8 shadow-sm">
@@ -174,7 +181,7 @@
                     </ul>
                 </div>
                 <a class="mt-8 block w-full rounded-md border border-transparent bg-emerald-500 px-6 py-3 text-center font-medium text-white hover:bg-emerald-600"
-                    href="{{ route('register') }}">S'abonner</a>
+                   data-period="Monthly" href="{{ route('plan.checkout', 2) }}">S'abonner</a>
             </div>
 
             <div class="relative flex flex-col rounded-2xl border border-gray-200 p-8 shadow-sm">
@@ -214,7 +221,7 @@
                     </ul>
                 </div>
                 <a class="mt-8 block w-full rounded-md border border-transparent bg-emerald-500 px-6 py-3 text-center font-medium text-white hover:bg-emerald-600"
-                    href="{{ route('register') }}">S'abonner</a>
+                    data-period="Monthly"  href="{{ route('plan.checkout', 3) }}">S'abonner</a>
             </div>
         </div>
     </div>
@@ -224,9 +231,9 @@
             const planLinks = document.querySelectorAll("a[data-period]");
             planLinks.forEach((link) => {
                 const url = new URL(link.href);
-                url.searchParams.set("period", "monthly");
+                url.searchParams.set("period", "Monthly");
                 link.href = url.toString();
-                link.setAttribute("data-period", "monthly");
+                link.setAttribute("data-period", "Monthly");
             });
         });
 
@@ -254,7 +261,7 @@
                 toggleDot.classList.remove("translate-x-6");
             }
 
-            const period = checkbox.checked ? "yearly" : "monthly";
+            const period = checkbox.checked ? "Yearly" : "Monthly";
             const planLinks = document.querySelectorAll("a[data-period]");
             planLinks.forEach((link) => {
                 const url = new URL(link.href);
