@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
-    public function __construct(private StripeClient $stripeClient)
+    private StripeClient $stripeClient;
+
+    public function __construct()
     {
-        $this->stripeClient = new StripeClient(env('STRIPE_SECRET_KEY'));
+        $this->stripeClient = new StripeClient(config("services.stripe.secret"));
     }
 
     public function checkout(Plan $plan, Request $request)

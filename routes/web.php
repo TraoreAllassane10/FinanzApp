@@ -54,9 +54,8 @@ Route::get('/statistique', [StatsController::class, 'index'])->middleware(['auth
 Route::get('/subscription', [SubscriptionController::class, 'index'])->middleware(['auth', 'verified'])->name('subscription.index');
 
 # CHECKOUT
-Route::get('/checkout/plan/{plan}', [CheckoutController::class, 'checkout'])->name('plan.checkout')->middleware(['auth', 'verified']);
-Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('plan.checkout.success')->middleware(['auth', 'verified']);
-Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('plan.checkout.cancel')->middleware(['auth', 'verified']);
-
+Route::get("/checkout/plan/{plan}", [CheckoutController::class, 'checkout'])->name('plan.checkout')->middleware(['auth', 'verified']);
+Route::get("/checkout/success", [CheckoutController::class, 'success'])->name('plan.checkout.success')->middleware(['auth', 'verified']);
+Route::get("/checkout/cancel", [CheckoutController::class, 'cancel'])->name('plan.checkout.cancel')->middleware(['auth', 'verified']);
 
 require __DIR__ . '/auth.php';
