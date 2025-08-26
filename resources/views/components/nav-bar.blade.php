@@ -12,6 +12,10 @@
                 <h3 class="text-gray-800">{{auth()->user()->first_name}} {{auth()->user()->last_name}}</h3>
                 <p class="text-gray-500 text-sm">{{auth()->user()->email}}</p>
             </a>
+
+            @if (Auth::user()->role != "Admin")
+                <span class="rounded-lg bg-yellow-800 text-sm p-2 text-white">{{ $activeSubscription->plan->name }}</span>
+            @endif
         </div>
     </div>
 </div>

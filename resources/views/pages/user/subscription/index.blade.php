@@ -52,17 +52,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+           @foreach ($subscriptions as $item)
+                <tr>
                 <td
                     class="border-b border-gray-200 px-3 py-4 text-sm text-gray-600"
                 >
-                    2025-01-06
+                    {{$item->created_at}}
                 </td>
                 <td class="border-b border-gray-200 px-6 py-4 text-sm">
                     <span
                         class="rounded-md bg-blue-200 px-3 py-1 text-xs font-semibold text-blue-700"
                     >
-                        Plan Premium
+                        {{$item->plan->name}}
                     </span>
                 </td>
                 <td
@@ -71,29 +72,29 @@
                     <span
                         class="rounded-md bg-yellow-200 px-3 py-1 text-xs font-semibold text-yellow-700"
                     >
-                        2025-01-01
+                        {{$item->start_date}}
                     </span>
                 </td>
                 <td class="border-b border-gray-200 px-3 py-4 text-sm">
                     <span
                         class="rounded-md bg-red-200 px-3 py-1 text-xs font-semibold text-red-700"
                     >
-                        2025-12-31
+                        {{$item->end_date}}
                     </span>
                 </td>
-                <td class="border-b border-gray-200 px-4 py-4 text-sm">$100</td>
+                <td class="border-b border-gray-200 px-4 py-4 text-sm">${{$item->amount}}</td>
                 <td class="border-b border-gray-200 px-4 py-4 text-sm">
                     <span
                         class="rounded-full bg-green-200 px-3 py-1 text-xs font-semibold text-blue-700"
                     >
-                        Payé
+                        {{$item->payment_status}}
                     </span>
                 </td>
                 <td class="border-b border-gray-200 px-3 py-4 text-sm">
                     <span
                         class="rounded-full bg-green-200 px-3 py-1 text-xs font-semibold text-green-700"
                     >
-                        Actif
+                        {{$item->status}}
                     </span>
                 </td>
                 <td class="border-b border-gray-200 px-6 py-4 text-sm">
@@ -104,58 +105,8 @@
                     </button>
                 </td>
             </tr>
-            <tr>
-                <td
-                    class="border-b border-gray-200 px-3 py-4 text-sm text-gray-600"
-                >
-                    2025-01-05
-                </td>
-                <td class="border-b border-gray-200 px-6 py-4 text-sm">
-                    <span
-                        class="rounded-md bg-blue-200 px-3 py-1 text-xs font-semibold text-blue-700"
-                    >
-                        Plan Standard
-                    </span>
-                </td>
-                <td
-                    class="border-b border-gray-200 px-3 py-4 text-sm text-gray-600"
-                >
-                    <span
-                        class="rounded-md bg-yellow-200 px-3 py-1 text-xs font-semibold text-yellow-700"
-                    >
-                        2025-01-01
-                    </span>
-                </td>
-                <td class="border-b border-gray-200 px-3 py-4 text-sm">
-                    <span
-                        class="rounded-md bg-red-200 px-3 py-1 text-xs font-semibold text-red-700"
-                    >
-                        2025-06-30
-                    </span>
-                </td>
-                <td class="border-b border-gray-200 px-4 py-4 text-sm">$50</td>
-                <td class="border-b border-gray-200 px-4 py-4 text-sm">
-                    <span
-                        class="rounded-full bg-yellow-200 px-3 py-1 text-xs font-semibold text-yellow-700"
-                    >
-                        En attente
-                    </span>
-                </td>
-                <td class="border-b border-gray-200 px-3 py-4 text-sm">
-                    <span
-                        class="rounded-full bg-red-200 px-3 py-1 text-xs font-semibold text-red-700"
-                    >
-                        Expiré
-                    </span>
-                </td>
-                <td class="border-b border-gray-200 px-6 py-4 text-sm">
-                    <button
-                        class="rounded-full bg-red-200 px-3 py-1 text-sm font-semibold text-red-700"
-                    >
-                        📝 Annuler
-                    </button>
-                </td>
-            </tr>
+           @endforeach
+          
         </tbody>
     </table>
 </div>

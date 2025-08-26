@@ -34,7 +34,9 @@ Route::get('/admin/home', [DashboardController::class, 'index'])->middleware(['a
 Route::resource('/admin/plan', PlanController::class)->middleware(['auth', 'verified']);
 
 Route::get('/admin/subscription', [AdminSubscriptionController::class, "index"])->middleware(['auth', 'verified'])->name('admin.subscription');
-Route::get('/admin/subscription/1', [AdminSubscriptionController::class, "show"])->middleware(['auth', 'verified'])->name('admin.subscription.show');
+Route::get('/admin/subscription/{subscription}', [AdminSubscriptionController::class, "show"])->middleware(['auth', 'verified'])->name('admin.subscription.show');
+Route::get("/admin/subscription/disable/{subscription}", [AdminSubscriptionController::class, "disable"])->middleware(['auth', 'verified'])->name('admin.subscription.disable');
+Route::get("/admin/subscription/enable/{subscription}", [AdminSubscriptionController::class, "enable"])->middleware(['auth', 'verified'])->name('admin.subscription.enable');
 
 Route::get('/admin/users', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.user');
 

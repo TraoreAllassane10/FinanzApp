@@ -51,4 +51,14 @@ class User extends Authenticatable
     public function getImageUrl() {
         return Storage::url($this->image);
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, "user_id", "id");
+    }
+
+    public function activeSubscription()
+    {
+        return $this->subscriptions()->where("status", Subscription::STATUS_ACTIF)->first();
+    }
 }

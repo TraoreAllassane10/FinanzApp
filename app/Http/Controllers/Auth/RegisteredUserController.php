@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Models\Plan;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Auth\Events\Registered;
 
 class RegisteredUserController extends Controller
 {
@@ -32,7 +34,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -44,10 +46,25 @@ class RegisteredUserController extends Controller
             'role' => User::USER_ROLE
         ]);
 
+        $freePlan = Plan::where('duration', Plan::FREE_ACCESS)->first();
+        $start_date = now();
+        $end_date = $start_date->copy()->addYear();
+
+        Subscription::create([
+            "user_id" => $user->id,
+            "plan_id" => $freePlan->id,
+            "period" => Plan::YEARLY_DURATION,
+            "start_date" => $start_date,
+            "end_date" => $end_date,
+            "amount" => $freePlan->price,
+            "payment_status" => Subscription::PAYEMENT_STATUS_NO_PAYEMENT_REQUIRED,
+            "status" => Subscription::STATUS_ACTIF,
+        ]);
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('/home', absolute: false));
     }
 }
