@@ -52,6 +52,10 @@ class User extends Authenticatable
         return Storage::url($this->image);
     }
 
+    public function cards() {
+        return $this->hasMany(Card::class, "user_id", "id");
+    }
+
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class, "user_id", "id");

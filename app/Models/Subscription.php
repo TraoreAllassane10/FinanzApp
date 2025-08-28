@@ -38,4 +38,8 @@ class Subscription extends Model
     {
         return $this->belongsTo(Plan::class, 'plan_id', 'id');
     }
+
+    public function canAddMoreCards() {
+        return $this->card_count < $this->plan->max_cards;
+    }
 }
