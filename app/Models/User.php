@@ -65,4 +65,8 @@ class User extends Authenticatable
     {
         return $this->subscriptions()->where("status", Subscription::STATUS_ACTIF)->first();
     }
+
+    public function pockets() {
+        return $this->hasMany(Pocket::class,"user_id", "id");
+    }
 }

@@ -6,15 +6,27 @@ use App\Models\Pocket;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Pocket\StorePocketRequest;
 use App\Http\Requests\Pocket\UpdatePocketRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class PocketController extends Controller
 {
+    public function __construct(private ?User $user){
+        $this->user = Auth::user();
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view("pages.user.pocket.index");
+        $activeSubscription = $this->user->activeSubscription();
+
+        return view("pages.user.pocket.index",
+            [
+                "pockets" => $this->user->pockets()->orderByDesc("id")->get(),
+                "remaining_pockets" => $activeSubscription->plan->max_pocket - $this->user->pockets()->count()
+            ]);
     }
 
     /**
@@ -22,6 +34,11 @@ class PocketController extends Controller
      */
     public function create()
     {
+        if (!$this->user->activeSubscription()?->canAddMorePocket())
+        {
+            return redirect()->back()->with("error","Impossible d'ajouter une poche");
+        }
+
         return view("pages.user.pocket.edit");
     }
 
@@ -30,7 +47,11 @@ class PocketController extends Controller
      */
     public function store(StorePocketRequest $request)
     {
-        //
+        $this->user->pockets()->create($request->all());
+
+        $this->user->activeSubscription()->increment("pocket_count");
+
+        return to_route("pocket.index")->with("success","Poche ajoutée avec succes");
     }
 
     /**
@@ -46,7 +67,7 @@ class PocketController extends Controller
      */
     public function edit(Pocket $pocket)
     {
-        return view("pages.user.pocket.edit");
+        return view("pages.user.pocket.edit", ["pocket" => $pocket]);
     }
 
     /**
@@ -54,7 +75,13 @@ class PocketController extends Controller
      */
     public function update(UpdatePocketRequest $request, Pocket $pocket)
     {
-        //
+        $pocket->update($request->all());
+
+        $pocket->calculateProgression();
+
+        $pocket->save();
+
+        return to_route("pocket.index")->with("success","Poche modifiée avec succes");
     }
 
     /**
@@ -62,6 +89,8 @@ class PocketController extends Controller
      */
     public function destroy(Pocket $pocket)
     {
-        //
+        $pocket->delete();
+
+        return redirect()->back()->with("success","Poche supprimée avec succes");
     }
 }

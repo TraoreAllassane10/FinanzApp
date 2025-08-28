@@ -42,4 +42,8 @@ class Subscription extends Model
     public function canAddMoreCards() {
         return $this->card_count < $this->plan->max_cards;
     }
+
+     public function canAddMorePocket() {
+        return $this->pocket_count < $this->plan->max_pocket;
+    }
 }

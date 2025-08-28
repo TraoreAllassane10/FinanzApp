@@ -11,7 +11,7 @@ class StorePocketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StorePocketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "name" => ["required", "string","max:255"],
+            "balance_gaol" => ["nullable", "numeric", "min:0"],
+            "due_date" => ["nullable", "date", "after:today"],
+            "is_blocked" => ["nullable", "boolean"]
         ];
     }
 }
