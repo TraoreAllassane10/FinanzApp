@@ -8,7 +8,7 @@
                 <h3 class="text-gray-500">Mon Solde</h3>
                 <span class="rounded-full bg-yellow-100 p-2">💰</span>
             </div>
-            <p class="mt-2 text-3xl font-semibold">$12,345.67</p>
+            <p class="mt-2 text-3xl font-semibold">${{number_format($totalBalance, 2, ",")}}</p>
         </div>
 
         <!-- Income Card -->
@@ -17,7 +17,7 @@
                 <h3 class="text-gray-500">Revenus de ce mois</h3>
                 <span class="rounded-full bg-green-100 p-2">📈</span>
             </div>
-            <p class="mt-2 text-3xl font-semibold">$3,210.89</p>
+            <p class="mt-2 text-3xl font-semibold">${{number_format($currentMonthIncome, 2, ",")}}</p>
         </div>
 
         <!-- Expenses Card -->
@@ -26,7 +26,7 @@
                 <h3 class="text-gray-500">Dépenses de ce mois</h3>
                 <span class="rounded-full bg-red-100 p-2">📉</span>
             </div>
-            <p class="mt-2 text-3xl font-semibold">$2,345.67</p>
+            <p class="mt-2 text-3xl font-semibold">{{number_format($currentMonthExpenses, 2, ",")}}</p>
         </div>
     </div>
 
@@ -75,43 +75,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                       @foreach ($lastTransactions as $transaction)
+                         <tr>
                             <td class="border-b border-gray-200 px-6 py-4 text-sm text-gray-600">
-                                2025-01-01
+                                {{$transaction->created_at}}
                             </td>
                             <td class="border-b border-gray-200 px-6 py-4 text-sm">
                                 <span
-                                    class="rounded-md bg-green-200 px-3 py-1 text-xs font-semibold text-blue-700">Dépôt</span>
+                                    class="rounded-md bg-green-200 px-3 py-1 text-xs font-semibold text-blue-700">{{$transaction->type}}</span>
                             </td>
                             <td class="border-b border-gray-200 px-6 py-4 text-sm">
-                                <span class="rounded-md bg-green-200 px-3 py-1 text-xs font-semibold text-green-700">Compte
-                                    Bancaire</span>
+                                <span class="rounded-md bg-green-200 px-3 py-1 text-xs font-semibold text-green-700">{{$transaction->source?->type}}</span>
                             </td>
                             <td class="border-b border-gray-200 px-6 py-4 text-sm">
-                                Portefeuille
+                                {{$transaction->destination?->type}}
                             </td>
                             <td class="border-b border-gray-200 px-6 py-4 text-sm text-gray-600">
-                                $1,000.00
+                                ${{$transaction->amount}}
                             </td>
                         </tr>
-                        <tr>
-                            <td class="border-b border-gray-200 px-6 py-4 text-sm text-gray-600">
-                                2025-01-02
-                            </td>
-                            <td class="border-b border-gray-200 px-6 py-4 text-sm">
-                                <span
-                                    class="rounded-md bg-red-200 px-3 py-1 text-xs font-semibold text-red-700">Retrait</span>
-                            </td>
-                            <td class="border-b border-gray-200 px-6 py-4 text-sm">
-                                Portefeuille
-                            </td>
-                            <td class="border-b border-gray-200 px-6 py-4 text-sm">
-                                Épargne
-                            </td>
-                            <td class="border-b border-gray-200 px-6 py-4 text-sm text-gray-600">
-                                $500.00
-                            </td>
-                        </tr>
+                       @endforeach
                     </tbody>
                 </table>
             </div>
@@ -126,14 +109,14 @@
                 <div class="card-wrapper">
                     <div class="card rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 p-4 shadow-lg">
                         <div class="flex items-center justify-between">
-                            <span class="text-lg font-semibold text-white">Ma Banque</span>
+                            <span class="text-lg font-semibold text-white">{{$latestCard->type}}</span>
                         </div>
                         <div class="mt-2 text-2xl text-white">
-                            **** **** **** 1234
+                            **** **** **** {{substr($latestCard->card_number, -4)}}
                         </div>
                         <div class="mt-4 flex justify-between text-white">
-                            <span>Nom du Titulaire</span>
-                            <span>12/25</span>
+                            <span>{{$latestCard->name}}</span>
+                            <span>{{\Carbon\Carbon::parse($latestCard->expiry_date)->format("m/y")}}</span>
                         </div>
                     </div>
                 </div>
@@ -173,20 +156,14 @@
                 ],
                 datasets: [{
                         label: "Revenus",
-                        data: [
-                            5000, 7000, 8000, 5600, 9000, 10000, 7500, 8200, 9100,
-                            9700, 8800, 10500,
-                        ],
+                        data: {!! json_encode(array_values($monthlyIncome ?? [])) !!},
                         backgroundColor: "rgba(75, 192, 192, 0.6)",
                         borderColor: "rgba(75, 192, 192, 1)",
                         borderWidth: 1,
                     },
                     {
                         label: "Dépenses",
-                        data: [
-                            3000, 4500, 6000, 3500, 7000, 6500, 4000, 6000, 7000,
-                            7800, 6500, 8000,
-                        ],
+                        data: {!! json_encode(array_values($monthlyExpenses ?? [])) !!},
                         backgroundColor: "rgba(255, 99, 132, 0.6)",
                         borderColor: "rgba(255, 99, 132, 1)",
                         borderWidth: 1,

@@ -73,4 +73,65 @@ class User extends Authenticatable
     public function transactions() {
         return $this->hasMany(Transaction::class,"user_id", "id");
     }
+
+
+    // Calculer le solde total
+    public function totalBalance()
+    {
+        return $this->pockets()->sum("balance") + $this->cards()->sum("balance");
+    }
+
+    //Les depenses du mois courant
+    public function currentMonthExpenses() {
+        return $this->transactions()->where("type", Transaction::TYPE_TRANSACTION_EXPENSE)
+            ->whereYear("created_at", now()->year)
+            ->whereMonth("created_at", now()->month)
+            ->sum("amount");
+    }
+
+    //Les Revenus du mois courant
+    public function currentMonthIncome() {
+        return $this->transactions()->where("type", Transaction::TYPE_TRANSACTION_INCOME)
+            ->whereYear("created_at", now()->year)
+            ->whereMonth("created_at", now()->month)
+            ->sum("amount");
+    }
+
+    //Calculer le montant des depenses mensuelles de l'année courante
+    public function monthlyExpense() {
+        $monthlyExpenses = [];
+
+        foreach ($this->transactions() as $transaction) {
+            if ($transaction->type == Transaction::TYPE_TRANSACTION_EXPENSE && $transaction->created_at->format("Y") == now()->format("Y")) {
+                $month = $transaction->created_at->format("Y-m");
+
+                if (!isset($monthlyExpenses[$month])) {
+                    $monthlyExpenses[$month] = 0;
+                }
+
+                $monthlyExpenses[$month] += $transaction->amount;
+            }
+
+            return $monthlyExpenses;
+        }
+    }
+
+    //Calculer le montant des revenus mensuelles de l'année courante
+    public function monthlyIncome() {
+        $monthlyIncome = [];
+
+        foreach ($this->transactions() as $transaction) {
+            if ($transaction->type == Transaction::TYPE_TRANSACTION_INCOME && $transaction->created_at->format("Y") == now()->format("Y")) {
+                $month = $transaction->created_at->format("Y-m");
+
+                if (!isset($monthlyIncome[$month])) {
+                    $monthlyIncome[$month] = 0;
+                }
+
+                $monthlyIncome[$month] += $transaction->amount;
+            }
+
+            return $monthlyIncome;
+        }
+    }
 }
